@@ -7,7 +7,6 @@ import {
   deleteAct,
 } from "../controllers/acts";
 import { ActSchema, ActsSchema, ActTitleSchema } from "../schemas/act";
-import { Type } from "@sinclair/typebox";
 import { MessageSchema } from "../schemas";
 
 export const actsRoutes: FastifyPluginAsync = async app => {
@@ -61,7 +60,7 @@ export const actsRoutes: FastifyPluginAsync = async app => {
         params: ActTitleSchema,
         body: ActSchema,
         response: {
-          201: MessageSchema,
+          201: ActSchema,
           404: MessageSchema,
         },
       },
