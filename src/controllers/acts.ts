@@ -1,7 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { Act } from "../schemas/act";
+import { Act, ActTitle } from "../schemas/act";
+import { Message } from "../schemas";
 
-const acts: Act[] = [
+let acts: Act[] = [
   {
     title: "A sette anni si è bambinelli e a settanta si è ancora quelli",
     titleDia: "A SÈT AGN S’È PÖTÈI E A SETÀNTA S’È AMÒ CHÈI",
@@ -504,15 +505,55 @@ export const getActs = async (): Promise<Act[]> => {
 };
 
 export const getAct = async (
-  req: FastifyRequest<{ Params: { title: string } }>,
+  request: FastifyRequest<{ Params: ActTitle }>,
   reply: FastifyReply
 ): Promise<Act | null> => {
   const act = acts.find(
     act =>
-      act.title.toLocaleLowerCase() === req.params.title.toLocaleLowerCase()
+      act.title.toLocaleLowerCase() === request.params.title.toLocaleLowerCase()
   );
   if (!act) {
     return reply.status(404).send({ message: "Act not found" });
   }
   return reply.status(200).send(act);
+};
+
+export const addAct = async (
+  request: FastifyRequest<{ Body: Act }>,
+  reply: FastifyReply
+): Promise<Act> => {
+  acts = [request.body, ...acts];
+  return request.body;
+};
+
+export const updateAct = async (
+  request: FastifyRequest<{ Params: ActTitle; Body: Act }>,
+  reply: FastifyReply
+) => {
+  acts = acts.map(act =>
+    act.title.toLocaleLowerCase() === request.params.title ? request.body : act
+  );
+
+  return request.body;
+};
+
+export const deleteAct = async (
+  request: FastifyRequest<{ Params: { title: string } }>,
+  reply: FastifyReply
+): Promise<Message> => {
+  const idx = acts.findIndex(
+    a => a.title.toLocaleLowerCase() === request.params.title
+  );
+  if (idx === -1) {
+    return reply
+      .code(404)
+      .send({ message: `${request.params.title} not found` });
+  }
+
+  acts = acts.filter(
+    act =>
+      act.title.toLocaleLowerCase() !== request.params.title.toLocaleLowerCase()
+  );
+
+  return { message: `${request.params.title} deleted` };
 };
