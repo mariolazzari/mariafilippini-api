@@ -19,8 +19,8 @@ export const ActsSchema = Type.Array(ActSchema);
 
 export type Acts = Static<typeof ActsSchema>;
 
-export const ActTitleSchema = Type.Object({
-  title: Type.String(),
+export const ActIdSchema = Type.Object({
+  id: Type.Number(),
 });
 
-export type ActTitle = Static<typeof ActTitleSchema>;
+export type ActId = Static<typeof ActIdSchema>;

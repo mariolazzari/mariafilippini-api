@@ -1,12 +1,12 @@
 import { FastifyPluginAsync } from "fastify";
 import {
   getActs,
-  getAct,
+  //  getAct,
   addAct,
   updateAct,
   deleteAct,
 } from "../controllers/acts";
-import { ActSchema, ActsSchema, ActTitleSchema } from "../schemas/act";
+import { ActIdSchema, ActSchema, ActsSchema } from "../schemas/act";
 import { MessageSchema } from "../schemas";
 
 export const actsRoutes: FastifyPluginAsync = async app => {
@@ -24,19 +24,19 @@ export const actsRoutes: FastifyPluginAsync = async app => {
   );
 
   // get act by title
-  app.get(
-    "/acts/:title",
-    {
-      schema: {
-        params: ActTitleSchema,
-        response: {
-          200: ActSchema,
-          404: MessageSchema,
-        },
-      },
-    },
-    getAct
-  );
+  // app.get(
+  //   "/acts/:title",
+  //   {
+  //     schema: {
+  //       params: ActTitleSchema,
+  //       response: {
+  //         200: ActSchema,
+  //         404: MessageSchema,
+  //       },
+  //     },
+  //   },
+  //   getAct
+  // );
 
   // add new act
   app.post(
@@ -54,10 +54,10 @@ export const actsRoutes: FastifyPluginAsync = async app => {
 
   // update act
   app.put(
-    "/acts/:title",
+    "/acts/:id",
     {
       schema: {
-        params: ActTitleSchema,
+        params: ActIdSchema,
         body: ActSchema,
         response: {
           201: ActSchema,
@@ -70,10 +70,10 @@ export const actsRoutes: FastifyPluginAsync = async app => {
 
   // delete act
   app.delete(
-    "/acts/:title",
+    "/acts/:id",
     {
       schema: {
-        params: ActTitleSchema,
+        params: ActIdSchema,
         response: {
           200: MessageSchema,
           404: MessageSchema,
