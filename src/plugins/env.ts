@@ -1,10 +1,10 @@
 import fp from "fastify-plugin";
 import fastifyEnv from "@fastify/env";
-import { Env, EnvSchema } from "../schemas/env";
+import { Env, EnvSchema } from "../schemas";
 
 declare module "fastify" {
   interface FastifyInstance {
-    config: Env; // 👈 typed config available everywhere
+    config: Env;
   }
 }
 

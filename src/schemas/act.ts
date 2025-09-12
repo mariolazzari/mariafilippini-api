@@ -1,6 +1,7 @@
 import { Static, Type } from "@sinclair/typebox";
 
 export const ActSchema = Type.Object({
+  id: Type.Optional(Type.Number()),
   title: Type.String({ minLength: 5, maxLength: 100 }),
   titleDia: Type.Optional(Type.String()),
   genre: Type.String(),

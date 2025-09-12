@@ -5,3 +5,6 @@ export const MessageSchema = Type.Object({
 });
 
 export type Message = Static<typeof MessageSchema>;
+
+export * from "./act";
+export * from "./env";

@@ -21,8 +21,9 @@ const registerPlugins = async () => {
 
 // regiter routes
 const registerRoutes = async () => {
-  const opts = { prefix: "/api" };
-  await app.register(actsRoutes, opts);
+  app.log.info("Registing routes...");
+  await app.register(actsRoutes, { prefix: "/api/acts" });
+  app.log.info("Routes registred");
 };
 
 export const startServer = async () => {
