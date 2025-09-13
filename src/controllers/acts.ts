@@ -2,22 +2,29 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { Act, ActId } from "../schemas/act";
 import { Message } from "../schemas";
 import { notFound } from ".";
+import { actsService } from "../services/actsService";
 
 const actNotFound = (reply: FastifyReply, id: number) =>
   notFound(reply, `Act not found with id ${id}`);
 
+export const actsController = {};
+
 // get all acts
-export const getActs = async (request: FastifyRequest) =>
-  await request.server.prisma.act.findMany();
+export const getActs = async (request: FastifyRequest, reply: FastifyReply) => {
+  const { getActs } = actsService(request.server);
+  const acts = await getActs();
+
+  return reply.code(200).send(acts);
+};
 
 // get act by ID
 export const getAct = async (
   request: FastifyRequest<{ Params: ActId }>,
   reply: FastifyReply
 ) => {
-  const { prisma } = request.server;
+  const { getAct } = actsService(request.server);
   const { id } = request.params;
-  const act = await prisma.act.findUnique({ where: { id } });
+  const act = await getAct(id);
   if (!act) {
     return actNotFound(reply, id);
   }

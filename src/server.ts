@@ -6,7 +6,6 @@ import { actsRoutes } from "./routes/acts";
 // plugins
 import prismaPlugin from "./plugins/prisma";
 import envPlugin from "./plugins/env";
-import { Env } from "./schemas/env";
 
 const app = fastify({
   logger: true,
@@ -15,8 +14,10 @@ const app = fastify({
 
 // register plugins
 const registerPlugins = async () => {
+  app.log.info("Registing plugins...");
   app.register(envPlugin);
   app.register(prismaPlugin);
+  app.log.info("Plugins registred");
 };
 
 // regiter routes
@@ -29,14 +30,12 @@ const registerRoutes = async () => {
 export const startServer = async () => {
   try {
     app.log.info("Starting server...");
-    // register plugons and routes
+    // register plugins and routes
     await registerPlugins();
     await registerRoutes();
-    // read enviroment
-    const env = app.config as Env;
     // start server
-    await app.listen({ port: env.PORT, host: "0.0.0.0" });
-    app.log.info(`Server listening on http://localhost:${env.PORT}`);
+    const msg = await app.listen({ port: app.config.PORT, host: "0.0.0.0" });
+    app.log.info(`Server listening on ${msg}`);
   } catch (ex) {
     app.log.error("Error starting server");
     app.log.error(ex);
